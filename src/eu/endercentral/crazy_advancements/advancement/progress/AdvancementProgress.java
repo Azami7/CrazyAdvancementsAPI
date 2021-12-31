@@ -184,7 +184,8 @@ public class AdvancementProgress {
 	 * @return The remaining Criteria
 	 */
 	public Iterable<String> getRemainingCriteria() {
-		return getNmsProgress().e();
+		return getNmsProgress().getRemainingCriteria();
+		//return getNmsProgress().e();
 	}
 	
 	/**
@@ -193,7 +194,7 @@ public class AdvancementProgress {
 	 * @return The awarded Criteria
 	 */
 	public Iterable<String> getAwardedCriteria() {
-		return getNmsProgress().f();
+		return getNmsProgress().getAwardedCriteria();
 	}
 	
 	/**
@@ -212,7 +213,7 @@ public class AdvancementProgress {
 	 * @return The CriterionProgress
 	 */
 	public CriterionProgress getCriterionProgress(String name) {
-		return getNmsProgress().c(name);
+		return getNmsProgress().getCriterionProgress(name);
 	}
 	
 	/**
@@ -221,7 +222,7 @@ public class AdvancementProgress {
 	 * @return Whether the Progress is Done
 	 */
 	public boolean isDone() {
-		return getNmsProgress().a();
+		return getNmsProgress().isDone();
 	}
 	
 	/**

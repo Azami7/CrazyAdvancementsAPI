@@ -892,7 +892,7 @@ public final class AdvancementManager {
 			try {
 				os = new FileReader(file);
 				
-				JsonElement element = JsonParser.parseReader(os);
+				JsonElement element = new JsonParser().parse(os);
 				os.close();
 				
 				SaveFile saveFile = SaveFile.fromJSON(element);

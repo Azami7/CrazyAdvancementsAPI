@@ -16,7 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -183,7 +183,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 				try {
 					os = new FileReader(file);
 					
-					JsonElement element = JsonParser.parseReader(os);
+					JsonElement element = new JsonParser().parse(os);
 					os.close();
 					
 					SerializedAdvancement advancement = gson.fromJson(element, SerializedAdvancement.class);
@@ -300,7 +300,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 	static void setActiveTab(Player player, NameKey rootAdvancement, boolean update) {
 		if(update) {
 			PacketPlayOutSelectAdvancementTab packet = new PacketPlayOutSelectAdvancementTab(rootAdvancement == null ? null : rootAdvancement.getMinecraftKey());
-			((CraftPlayer)player).getHandle().b.a(packet);
+			((CraftPlayer)player).getHandle().b.sendPacket(packet);
 		}
 		activeTabs.put(player.getUniqueId().toString(), rootAdvancement);
 	}
@@ -315,8 +315,8 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		return activeTabs.get(player.getUniqueId().toString());
 	}
 	
-	private final String noPermission = "§cI'm sorry but you do not have permission to perform this command. Please contact the server administrator if you believe that this is in error.";
-	private final String commandIncompatible = "§cThis Command is incompatible with your Arguments!";
+	private final String noPermission = "ï¿½cI'm sorry but you do not have permission to perform this command. Please contact the server administrator if you believe that this is in error.";
+	private final String commandIncompatible = "ï¿½cThis Command is incompatible with your Arguments!";
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -347,12 +347,12 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 									toast.send(player);
 								}
 								
-								sender.sendMessage(players.size() == 1 ? "§aSuccessfully displayed Toast to §b" + players.get(0).getName() + "§a!" : "§aSuccessfully displayed Toast to §e" + players.size() + "§aPlayers!");
+								sender.sendMessage(players.size() == 1 ? "ï¿½aSuccessfully displayed Toast to ï¿½b" + players.get(0).getName() + "ï¿½a!" : "ï¿½aSuccessfully displayed Toast to ï¿½e" + players.size() + "ï¿½aPlayers!");
 							} else {
-								sender.sendMessage("§c'" + args[1] + "' isn't a valid Item Material");
+								sender.sendMessage("ï¿½c'" + args[1] + "' isn't a valid Item Material");
 							}
 						} else {
-							sender.sendMessage(args[0].startsWith("@") ? "§cNo Player found for Selector §e" + args[0] + "§c" : "§cCan't find Player '§e" + args[0] + "§c'");
+							sender.sendMessage(args[0].startsWith("@") ? "ï¿½cNo Player found for Selector ï¿½e" + args[0] + "ï¿½c" : "ï¿½cCan't find Player 'ï¿½e" + args[0] + "ï¿½c'");
 						}
 					} catch(Exception ex) {
 						ex.printStackTrace();
@@ -361,7 +361,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 					
 					
 				} else {
-					sender.sendMessage("§cUsage: §r" + cmd.getUsage());
+					sender.sendMessage("ï¿½cUsage: ï¿½r" + cmd.getUsage());
 				}
 			} else {
 				sender.sendMessage(noPermission);
@@ -406,21 +406,21 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 													success = result == GenericResult.CHANGED;
 												}
 												
-												String criteriaString = "§c" + convertedCriteria[0];
+												String criteriaString = "ï¿½c" + convertedCriteria[0];
 												if(convertedCriteria.length > 1) {
 													for(String criteria : Arrays.copyOfRange(convertedCriteria, 1, convertedCriteria.length - 1)) {
-														criteriaString += "§a, §c" + criteria;
+														criteriaString += "ï¿½a, ï¿½c" + criteria;
 													}
-													criteriaString += " §aand §c" + convertedCriteria[convertedCriteria.length - 1];
+													criteriaString += " ï¿½aand ï¿½c" + convertedCriteria[convertedCriteria.length - 1];
 												}
 												
 												if(success) {
 													if(fileAdvancementManager.equals(manager)) {
 														fileAdvancementManager.saveProgress(player, advancement);
 													}
-													sender.sendMessage("§aSuccessfully " + (grant ? "granted" : "revoked") + " Criteria " + criteriaString + " §afor '§e" + advancement.getName() + "§a' " + (grant ? "to" : "from") + " §b" + player.getName());
+													sender.sendMessage("ï¿½aSuccessfully " + (grant ? "granted" : "revoked") + " Criteria " + criteriaString + " ï¿½afor 'ï¿½e" + advancement.getName() + "ï¿½a' " + (grant ? "to" : "from") + " ï¿½b" + player.getName());
 												} else {
-													sender.sendMessage("§cCriteria " + criteriaString + " §afor '§e" + advancement.getName() + "§c' " + (grant ? "is already granted to" : "is already not granted to") + " §b" + player.getName());
+													sender.sendMessage("ï¿½cCriteria " + criteriaString + " ï¿½afor 'ï¿½e" + advancement.getName() + "ï¿½c' " + (grant ? "is already granted to" : "is already not granted to") + " ï¿½b" + player.getName());
 												}
 												
 											} else {
@@ -440,24 +440,24 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 													if(fileAdvancementManager.equals(manager)) {
 														fileAdvancementManager.saveProgress(player, advancement);
 													}
-													sender.sendMessage("§aSuccessfully " + (grant ? "granted" : "revoked") + " Advancement '§e" + advancement.getName() + "§a' " + (grant ? "to" : "from") + " §b" + player.getName());
+													sender.sendMessage("ï¿½aSuccessfully " + (grant ? "granted" : "revoked") + " Advancement 'ï¿½e" + advancement.getName() + "ï¿½a' " + (grant ? "to" : "from") + " ï¿½b" + player.getName());
 												} else {
-													sender.sendMessage("§cAdvancement '§e" + advancement.getName() + "§c' " + (grant ? "is already granted to" : "is already not granted to") + " §b" + player.getName());
+													sender.sendMessage("ï¿½cAdvancement 'ï¿½e" + advancement.getName() + "ï¿½c' " + (grant ? "is already granted to" : "is already not granted to") + " ï¿½b" + player.getName());
 												}
 											}
 											
 										} else {
-											sender.sendMessage("§cAdvancement with Name '§e" + args[2] + "§c' does not exist in '§e" + args[1] + "§c'");
+											sender.sendMessage("ï¿½cAdvancement with Name 'ï¿½e" + args[2] + "ï¿½c' does not exist in 'ï¿½e" + args[1] + "ï¿½c'");
 										}
 									} else {
-										sender.sendMessage("§c'§e" + args[1] + "§c' does not contain Player '§e" + args[0] + "§c'");
+										sender.sendMessage("ï¿½c'ï¿½e" + args[1] + "ï¿½c' does not contain Player 'ï¿½e" + args[0] + "ï¿½c'");
 									}
 								}
 							} else {
-								sender.sendMessage("§cManager with Name '§e" + args[1] + "§c' does not exist");
+								sender.sendMessage("ï¿½cManager with Name 'ï¿½e" + args[1] + "ï¿½c' does not exist");
 							}
 						} else {
-							sender.sendMessage(args[0].startsWith("@") ? "§cNo Player found for Selector §e" + args[0] + "§c" : "§cCan't find Player '§e" + args[0] + "§c'");
+							sender.sendMessage(args[0].startsWith("@") ? "ï¿½cNo Player found for Selector ï¿½e" + args[0] + "ï¿½c" : "ï¿½cCan't find Player 'ï¿½e" + args[0] + "ï¿½c'");
 						}
 						
 					} catch(Exception ex) {
@@ -466,7 +466,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 					}
 					
 				} else {
-					sender.sendMessage("§cUsage: §r" + cmd.getUsage());
+					sender.sendMessage("ï¿½cUsage: ï¿½r" + cmd.getUsage());
 				}
 			} else {
 				sender.sendMessage(noPermission);
@@ -503,22 +503,22 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 													fileAdvancementManager.saveProgress(player, advancement);
 												}
 												
-												sender.sendMessage("§aSuccessfully set Criteria Progress to " + progress + " §afor Advancement '§e" + advancement.getName() + "§a' for Player §b" + player.getName());
+												sender.sendMessage("ï¿½aSuccessfully set Criteria Progress to " + progress + " ï¿½afor Advancement 'ï¿½e" + advancement.getName() + "ï¿½a' for Player ï¿½b" + player.getName());
 											}
 											
 										} else {
-											sender.sendMessage("§cAdvancement with Name '§e" + args[2] + "§c' does not exist in '§e" + args[1] + "§c'");
+											sender.sendMessage("ï¿½cAdvancement with Name 'ï¿½e" + args[2] + "ï¿½c' does not exist in 'ï¿½e" + args[1] + "ï¿½c'");
 										}
 										
 									} else {
-										sender.sendMessage("§c'§e" + args[1] + "§c' does not contain Player '§e" + args[0] + "§c'");
+										sender.sendMessage("ï¿½c'ï¿½e" + args[1] + "ï¿½c' does not contain Player 'ï¿½e" + args[0] + "ï¿½c'");
 									}
 								}
 							} else {
-								sender.sendMessage("§cManager with Name '§e" + args[1] + "§c' does not exist");
+								sender.sendMessage("ï¿½cManager with Name 'ï¿½e" + args[1] + "ï¿½c' does not exist");
 							}
 						} else {
-							sender.sendMessage(args[0].startsWith("@") ? "§cNo Player found for Selector §e" + args[0] + "§c" : "§cCan't find Player '§e" + args[0] + "§c'");
+							sender.sendMessage(args[0].startsWith("@") ? "ï¿½cNo Player found for Selector ï¿½e" + args[0] + "ï¿½c" : "ï¿½cCan't find Player 'ï¿½e" + args[0] + "ï¿½c'");
 						}
 						
 					} catch(Exception ex) {
@@ -527,7 +527,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 					}
 					
 				} else {
-					sender.sendMessage("§cUsage: §r" + cmd.getUsage());
+					sender.sendMessage("ï¿½cUsage: ï¿½r" + cmd.getUsage());
 				}
 			} else {
 				sender.sendMessage(noPermission);

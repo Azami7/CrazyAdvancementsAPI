@@ -50,8 +50,8 @@ public class NameKey {
 	 * @param from The MinecraftKey to generate from
 	 */
 	public NameKey(MinecraftKey from) {
-		this.namespace = from.b().toLowerCase();
-		this.key = from.a().toLowerCase();
+		this.namespace = from.getNamespace().toLowerCase();
+		this.key = from.getKey().toLowerCase();
 	}
 	
 	/**
