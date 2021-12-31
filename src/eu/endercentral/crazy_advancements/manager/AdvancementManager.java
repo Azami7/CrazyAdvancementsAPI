@@ -750,9 +750,12 @@ public final class AdvancementManager {
 		saveFile.merge(newSaveFile);//Merge new Save Data onto existing Data so nothing gets lost
 		
 		try {
-			if(!file.exists() || !file.isFile()) {
+			if(!file.exists() || !file.isFile())
+				file.delete();
+
+			if(!file.exists())
 				file.createNewFile();
-			}
+
 			FileWriter w = new FileWriter(file);
 			w.write(saveFile.toJson());
 			w.close();
@@ -859,26 +862,7 @@ public final class AdvancementManager {
 			advancement.unloadProgress(uuid);//Remove Progress Object from Advancement for garbage collection
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	//Internal Utility methods
 	
 	private static boolean isOnline(UUID uuid) {
@@ -912,5 +896,4 @@ public final class AdvancementManager {
 		//Return Empty Save if Save File doesn't exist
 		return new SaveFile(new ArrayList<ProgressData>(), new ArrayList<CriteriaData>());
 	}
-	
 }
